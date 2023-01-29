@@ -24,7 +24,40 @@ function App() {
   );
 
   const geovernoments = (govNum: number) => {
-    const govesArr = {};
+    const govesArr = {
+      "01": { ar: "القاهرة", en: "Cairo", lat: "", lng: "" },
+      "02": { ar: "الإسكندرية", en: "Alexandria", lat: "", lng: "" },
+      "04": { ar: "السويس", en: "Suez", lat: "", lng: "" },
+      "11": { ar: "دمياط", en: "Damietta", lat: "", lng: "" },
+      "12": { ar: "الدقهلية", en: "Dakahlia", lat: "", lng: "" },
+      "13": { ar: "الشرقية", en: "Eastern", lat: "", lng: "" },
+      "14": { ar: "القليوبية", en: "Qalyubia", lat: "", lng: "" },
+      "15": { ar: "كفر الشيخ", en: "Kafr El-Sheikh", lat: "", lng: "" },
+      "16": { ar: "الغربية", en: "western", lat: "", lng: "" },
+      "17": { ar: "المنوفية", en: "Menoufia", lat: "", lng: "" },
+      "18": { ar: "البحيرة", en: "the lake", lat: "", lng: "" },
+      "19": { ar: "الإسماعيلية", en: "Ismailia", lat: "", lng: "" },
+      "21": { ar: "الجيزة", en: "Giza", lat: "", lng: "" },
+      "22": { ar: "بني سويف", en: "Bani Sweif", lat: "", lng: "" },
+      "23": { ar: "الفيوم", en: "Fayoum", lat: "", lng: "" },
+      "24": { ar: "المنيا", en: "Minya", lat: "", lng: "" },
+      "25": { ar: "أسيوط", en: "Asyut", lat: "", lng: "" },
+      "26": { ar: "سوهاج", en: "Sohag", lat: "", lng: "" },
+      "27": { ar: "قنا", en: "Qena", lat: "", lng: "" },
+      "28": { ar: "أسوان", en: "Aswan", lat: "", lng: "" },
+      "29": { ar: "الأقصر", en: "El-Aqsur", lat: "", lng: "" },
+      "31": { ar: "البحر الأحمر	", en: "The Red Sea", lat: "", lng: "" },
+      "32": { ar: "الوادى الجديد", en: "The new Valley", lat: "", lng: "" },
+      "33": { ar: "مطروح", en: "Matrouh", lat: "", lng: "" },
+      "34": { ar: "شمال سيناء", en: "North Sinai", lat: "", lng: "" },
+      "35": { ar: "جنوب سيناء", en: "South of Sinaa", lat: "", lng: "" },
+      "88": {
+        ar: "خارج الجمهورية",
+        en: "outside the republic",
+        lat: "",
+        lng: "",
+      },
+    };
   };
 
   return (
