@@ -25,7 +25,7 @@ function App() {
 
   return (
     <div className="App">
-      <table className="table" dir="rtl">
+      <table className="table table-bordered" dir="rtl">
         <thead>
           <tr>
             <th>المواقيت</th>
@@ -39,11 +39,36 @@ function App() {
         <tbody>
           <tr>
             <th scope="row">المحافظة</th>
-            <td>{times.fajr.iso.toLocaleTimeString("ar-EG")}</td>
-            <td>{times.dhuhr.iso.toLocaleTimeString("ar-EG")}</td>
-            <td>{times.asr.iso.toLocaleTimeString("ar-EG")}</td>
-            <td>{times.maghrib.iso.toLocaleTimeString("ar-EG")}</td>
-            <td>{times.isha.iso.toLocaleTimeString("ar-EG")}</td>
+            <td>
+              {times.fajr.iso.toLocaleTimeString("ar-sa", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </td>
+            <td>
+              {times.dhuhr.iso.toLocaleTimeString("ar-sa", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </td>
+            <td>
+              {times.asr.iso.toLocaleTimeString("ar-sa", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </td>
+            <td>
+              {times.maghrib.iso.toLocaleTimeString("ar-sa", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </td>
+            <td>
+              {times.isha.iso.toLocaleTimeString("ar-sa", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </td>
           </tr>
         </tbody>
       </table>
