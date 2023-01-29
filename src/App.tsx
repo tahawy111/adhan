@@ -25,7 +25,7 @@ function App() {
 
   const geovernoments = (govNum: number) => {
     const govesArr = {
-      "01": { ar: "القاهرة", en: "Cairo", lat: "", lng: "" },
+      "01": { ar: "القاهرة", en: "Cairo", lat: 30.0561, lng: 31.2394 },
       "02": { ar: "الإسكندرية", en: "Alexandria", lat: "", lng: "" },
       "04": { ar: "السويس", en: "Suez", lat: "", lng: "" },
       "11": { ar: "دمياط", en: "Damietta", lat: "", lng: "" },
