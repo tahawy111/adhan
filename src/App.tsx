@@ -23,6 +23,10 @@ function App() {
     "auto" /* => timezone */
   );
 
+  const geovernoments = (govNum: number) => {
+    const govesArr = {};
+  };
+
   return (
     <div className="App">
       <table className="table table-bordered" dir="rtl">
