@@ -15,7 +15,7 @@
 
 .dates {
   width: 100%;
-  height: 130px;
+  height: 150px;
 }
 .dates .left {
   width: 33%;
@@ -30,4 +30,8 @@
 .dates .right {
   width: 33%;
   border: 1px solid black;
+}
+
+.fs-lg {
+  font-size: 60px;
 }
