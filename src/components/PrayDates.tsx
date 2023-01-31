@@ -133,7 +133,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
       <table className="table table-bordered" dir="rtl">
         <thead>
           <tr>
-            <th>المواقيت</th>
+            <th className="bg-dark text-white">المواقيت</th>
             <th>الفجر</th>
             <th>الظهر</th>
             <th>العصر</th>
