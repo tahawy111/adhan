@@ -5,18 +5,18 @@ import PrayDates from "./components/PrayDates";
 function App() {
   const [mainDate, setMainDate] = useState(new Date());
   const monthList = [
-    { hijri: "محرم", ar: `يـنايـر`, en: "January" },
-    { hijri: "صفر", ar: `فـبرايـر`, en: "February" },
-    { hijri: "ربيع الأول", ar: `مـارس`, en: "March" },
-    { hijri: "ربيع الآخر", ar: `أبـريـل`, en: "April" },
-    { hijri: "جمادى الأولى", ar: `مـايـو`, en: "May" },
-    { hijri: "جمادى الآخرة", ar: `يـونـيـو`, en: "June" },
-    { hijri: "رجب", ar: `يـولـيـو`, en: "July" },
-    { hijri: "شعبان", ar: `أغـسـطـس`, en: "August" },
-    { hijri: "رمضان", ar: `سبـتـمبر`, en: "September" },
-    { hijri: "شوال", ar: `أكـتـوبر`, en: "October" },
-    { hijri: "ذو القعدة", ar: `نـوفمبـر`, en: "November" },
-    { hijri: "ذو الحجة", ar: `ديـسـمـبر`, en: "December" },
+    { hijri: "محرم", coptic: "توت", ar: `يـنايـر`, en: "January" },
+    { hijri: "صفر", coptic: "بابه", ar: `فـبرايـر`, en: "February" },
+    { hijri: "ربيع الأول", coptic: "هاتور", ar: `مـارس`, en: "March" },
+    { hijri: "ربيع الآخر", coptic: "كيهك", ar: `أبـريـل`, en: "April" },
+    { hijri: "جمادى الأولى", coptic: "طوبة", ar: `مـايـو`, en: "May" },
+    { hijri: "جمادى الآخرة", coptic: "أمشير", ar: `يـونـيـو`, en: "June" },
+    { hijri: "رجب", coptic: "برمهات", ar: `يـولـيـو`, en: "July" },
+    { hijri: "شعبان", coptic: "برمودة", ar: `أغـسـطـس`, en: "August" },
+    { hijri: "رمضان", coptic: "بشنس", ar: `سبـتـمبر`, en: "September" },
+    { hijri: "شوال", coptic: "بؤونة", ar: `أكـتـوبر`, en: "October" },
+    { hijri: "ذو القعدة", coptic: "أبيب", ar: `نـوفمبـر`, en: "November" },
+    { hijri: "ذو الحجة", coptic: "مسري", ar: `ديـسـمـبر`, en: "December" },
   ];
 
   const daysList = [
@@ -38,7 +38,6 @@ function App() {
   );
   const copticDate = new Intl.DateTimeFormat("ar", {
     calendar: "coptic",
-    dateStyle: "full",
   })
     .format(mainDate)
     .split("،")[1]
@@ -105,7 +104,13 @@ function App() {
       </div>
       <PrayDates date={mainDate} />
 
-      <div>Copyright by Amer Tahawy {new Date().getFullYear()}</div>
+      <div>
+        Copyright by{" "}
+        <a href="https://web.facebook.com/profile.php?id=100011964761632">
+          Amer Tahawy
+        </a>{" "}
+        {new Date().getFullYear()}
+      </div>
     </div>
   );
 }
