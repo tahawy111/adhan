@@ -1,8 +1,7 @@
-import reactLogo from "./assets/react.svg";
 import "./App.css";
-import { Adhan } from "adhan.ts";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PrayDates from "./components/PrayDates";
+import azkar from "azkar";
 
 function App() {
   const [mainDate, setMainDate] = useState(new Date());
@@ -102,6 +101,8 @@ function App() {
         </div>
       </div>
       <PrayDates date={mainDate} />
+
+      <div>Copyright by Amer Tahawy {new Date().getFullYear()}</div>
     </div>
   );
 }
