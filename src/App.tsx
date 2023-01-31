@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import PrayDates from "./components/PrayDates";
 
 function App() {
-  const mainDate = new Date();
+  const [mainDate, setMainDate] = useState(new Date());
   const monthList = [
     { hijri: "محرم", ar: `يـنايـر`, en: "January" },
     { hijri: "صفر", ar: `فـبرايـر`, en: "February" },
@@ -32,15 +32,48 @@ function App() {
   ];
 
   let hijri = new Intl.DateTimeFormat("ar-SA-u-nu-latn");
-  const hijriDay = hijri.format(mainDate).slice(0, 1);
-  console.log(hijriDay);
+
+  const hijriDay = parseInt(hijri.format(mainDate).split("/")[0]);
+  const hijriMonth = parseInt(hijri.format(mainDate).split("/")[1]);
+  const hijriYear = parseInt(
+    hijri.format(mainDate).split("/")[2].split(" ")[0]
+  );
+  const copticDate = new Intl.DateTimeFormat("ar", {
+    calendar: "coptic",
+    dateStyle: "full",
+  })
+    .format(mainDate)
+    .split("،")[1]
+    .split(" E")[0]
+    .toString()
+    .trim();
+  const copticDay = parseInt(copticDate.split(" ")[0]);
+  const copticMonth = copticDate.split(" ")[1];
+  const copticYear = parseInt(copticDate.split(" ")[2]);
 
   return (
     <div className="App">
       <h1 className="text-danger mb-5">مواقيت الصلاة</h1>
+
+      <div className="mb-3 d-flex h-25">
+        <label htmlFor="dateInput" className="form-label">
+          أدخل التاريخ الذي تريد الانتقال إليه
+        </label>
+        <input
+          onChange={(e: any) => setMainDate(new Date(e.target.value))}
+          type="date"
+          className="form-control"
+        />
+      </div>
       <div className="dates border border-3 border-dark rounded-3 d-flex justify-content-between">
         <div className="left d-flex flex-column justify-content-center fw-bold">
-          <div className="fs-3">{hijri.format(mainDate)}</div>
+          <div className="fs-1">
+            {hijriDay.toLocaleString("ar-eg").replace("٬", "")}
+          </div>
+          <div className="fs-4">{monthList[hijriMonth - 1].hijri}</div>
+          <div className="fs-3">
+            {hijriYear.toLocaleString("ar-eg").replace("٬", "")}
+          </div>
         </div>
         <div className="center d-flex flex-column justify-content-center fw-bold">
           <div className="fs-3">{daysList[mainDate.getDay()].ar}</div>
@@ -53,11 +86,13 @@ function App() {
             {mainDate.getFullYear()}
           </div>
           <div className="border-2 border-dark border-top p-1 d-flex justify-content-center align-items-center">
-            TEST
+            {copticDay.toLocaleString("ar-eg").replace("٬", "") + " "}
+            {copticMonth + " "}
+            {copticYear.toLocaleString("ar-eg").replace("٬", "")}
           </div>
         </div>
         <div className="right d-flex flex-column justify-content-center fw-bold">
-          <div className="fs-lg">
+          <div className="fs-1">
             {mainDate.getDate().toLocaleString("ar-eg")}
           </div>
           <div className="fs-1">{monthList[mainDate.getMonth()].ar}</div>
@@ -66,7 +101,7 @@ function App() {
           </div>
         </div>
       </div>
-      <PrayDates />
+      <PrayDates date={mainDate} />
     </div>
   );
 }

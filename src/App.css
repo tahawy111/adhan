@@ -20,6 +20,7 @@
 .dates .left {
   width: 33%;
   border: 1px solid black;
+  line-height: 1.2;
 }
 
 .dates .center {
