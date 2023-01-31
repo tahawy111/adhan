@@ -38,15 +38,11 @@ function App() {
   );
   const copticDate = new Intl.DateTimeFormat("ar", {
     calendar: "coptic",
-  })
-    .format(mainDate)
-    .split("،")[1]
-    .split(" E")[0]
-    .toString()
-    .trim();
-  const copticDay = parseInt(copticDate.split(" ")[0]);
-  const copticMonth = copticDate.split(" ")[1];
-  const copticYear = parseInt(copticDate.split(" ")[2]);
+  }).format(mainDate);
+
+  const copticDay = parseInt(copticDate.split("/")[0]);
+  const copticMonth = parseInt(copticDate.split("/")[1]);
+  const copticYear = parseInt(copticDate.split("/")[2]);
 
   return (
     <div className="App">
@@ -88,7 +84,7 @@ function App() {
           </div>
           <div className="border-2 border-dark border-top p-1 d-flex justify-content-center align-items-center">
             {copticDay.toLocaleString("ar-eg").replace("٬", "") + " "}
-            {copticMonth + " "}
+            {monthList[copticMonth - 1].coptic + " "}
             {copticYear.toLocaleString("ar-eg").replace("٬", "")}
           </div>
         </div>
@@ -106,10 +102,17 @@ function App() {
 
       <div>
         Copyright by{" "}
-        <a href="https://web.facebook.com/profile.php?id=100011964761632">
+        <a
+          href="https://web.facebook.com/profile.php?id=100011964761632"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Amer Tahawy
         </a>{" "}
-        {new Date().getFullYear()}
+        {new Date().getFullYear()} &{" "}
+        <a href="https://github.com/tahawy111" target="_blank">
+          Github
+        </a>
       </div>
     </div>
   );
