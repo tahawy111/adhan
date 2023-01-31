@@ -1,7 +1,6 @@
 import "./App.css";
 import { useState } from "react";
 import PrayDates from "./components/PrayDates";
-import azkar from "azkar";
 
 function App() {
   const [mainDate, setMainDate] = useState(new Date());
