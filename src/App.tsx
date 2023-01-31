@@ -51,7 +51,11 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="text-danger mb-5">مواقيت الصلاة</h1>
+      <h1 className="text-danger mb-5">
+        مواقيت الصلاة
+        <br />
+        في مصر
+      </h1>
 
       <div className="mb-3 d-flex h-25">
         <label htmlFor="dateInput" className="form-label">
