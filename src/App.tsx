@@ -73,8 +73,8 @@ function App() {
           </div>
         </div>
         <div className="center d-flex flex-column justify-content-center fw-bold">
-          <div className="fs-3">{daysList[mainDate.getDay()].ar}</div>
-          <div className="fs-5">
+          <div className="fs-4">{daysList[mainDate.getDay()].ar}</div>
+          <div className="fs-6">
             {daysList[mainDate.getDay()].en.toUpperCase()}
           </div>
           <div className="fs-4">{mainDate.getDate()}</div>
@@ -92,7 +92,7 @@ function App() {
           <div className="fs-1">
             {mainDate.getDate().toLocaleString("ar-eg")}
           </div>
-          <div className="fs-1">{monthList[mainDate.getMonth()].ar}</div>
+          <div className="fs-2">{monthList[mainDate.getMonth()].ar}</div>
           <div className="fs-3 mt-3">
             {mainDate.getFullYear().toLocaleString("ar-eg").replace("٬", "")}
           </div>
