@@ -116,7 +116,7 @@ function App() {
         <script
           data-cfasync="false"
           type="text/javascript"
-          src="//p454951.clksite.com/adServe/banners?tid=454951_889932_0&type=footer&size=37"
+          src="//p454951.clksite.com/adServe/banners?tid=454951_889932_3"
         ></script>
       </div>
     </div>
