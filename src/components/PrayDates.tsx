@@ -128,7 +128,6 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
           </option>
         ))}
       </select>
-      {}
 
       <table className="table table-bordered" dir="rtl">
         <thead>

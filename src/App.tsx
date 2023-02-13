@@ -65,7 +65,9 @@ function App() {
           أدخل التاريخ الذي تريد الانتقال إليه
         </label>
         <input
-          onChange={(e: any) => setMainDate(new Date(e.target.value))}
+          onChange={(e: any) =>
+            setMainDate(new Date(e.target.value || new Date()))
+          }
           type="date"
           className="form-control"
         />
