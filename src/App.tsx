@@ -1,7 +1,6 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import PrayDates from "./components/PrayDates";
-import { Helmet } from "react-helmet-async";
 
 function App() {
   const [mainDate, setMainDate] = useState(new Date());
@@ -47,13 +46,6 @@ function App() {
 
   return (
     <div className="App">
-      <Helmet>
-        <script
-          data-cfasync="false"
-          type="text/javascript"
-          src="//p454951.clksite.com/adServe/banners?tid=454951_889964_0"
-        ></script>
-      </Helmet>
       <h1 className="text-danger mb-5">
         مواقيت الصلاة
         <br />
