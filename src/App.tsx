@@ -46,7 +46,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1 className="text-danger mb-5">
+      <h1 style={{ fontSize: "3em" }} className="text-danger mb-5">
         مواقيت الصلاة
         <br />
         في مصر
@@ -65,37 +65,39 @@ function App() {
         />
       </div>
       <div className="dates border border-3 border-dark rounded-3 d-flex justify-content-between">
-        <div className="left d-flex flex-column justify-content-center fw-bold">
-          <div className="fs-1">
+        <div style={{ fontSize: "1.7em" }} className="left d-flex flex-column justify-content-center fw-bold">
+          <div>
             {hijriDay.toLocaleString("ar-eg").replace("٬", "")}
           </div>
-          <div className="fs-4">{monthList[hijriMonth - 1].hijri}</div>
-          <div className="fs-3">
+          <div>{monthList[hijriMonth - 1].hijri}</div>
+          <div>
             {hijriYear.toLocaleString("ar-eg").replace("٬", "")}
           </div>
         </div>
-        <div className="center d-flex flex-column justify-content-center fw-bold">
-          <div className="fs-4">{daysList[mainDate.getDay()].ar}</div>
-          <div className="fs-6">
+        <div style={{ fontSize: "1.3em" }} className="center d-flex flex-column justify-content-center fw-bold">
+          <div>{daysList[mainDate.getDay()].ar}</div>
+          <div >
             {daysList[mainDate.getDay()].en.toUpperCase()}
           </div>
-          <div className="fs-4">{mainDate.getDate()}</div>
-          <div className="fs-6">
+          <div >{mainDate.getDate()}</div>
+          <div>
             {monthList[mainDate.getMonth()].en.toUpperCase() + " "}
             {mainDate.getFullYear()}
           </div>
-          <div className="border-2 border-dark border-top p-1 d-flex justify-content-center align-items-center">
+          <div style={{ fontSize: "1em" }} className="border-2 border-dark border-top p-1 d-flex justify-content-center align-items-center">
+
             {copticDay.toLocaleString("ar-eg").replace("٬", "") + " "}
             {monthList[copticMonth - 1].coptic + " "}
             {copticYear.toLocaleString("ar-eg").replace("٬", "")}
+
           </div>
         </div>
-        <div className="right d-flex flex-column justify-content-center fw-bold">
-          <div className="fs-1">
+        <div style={{ fontSize: "1.8em", }} className="right d-flex flex-column justify-content-center fw-bold">
+          <div>
             {mainDate.getDate().toLocaleString("ar-eg")}
           </div>
-          <div className="fs-2">{monthList[mainDate.getMonth()].ar}</div>
-          <div className="fs-3 mt-3">
+          <div>{monthList[mainDate.getMonth()].ar}</div>
+          <div style={{ marginTop: "0.7em" }}>
             {mainDate.getFullYear().toLocaleString("ar-eg").replace("٬", "")}
           </div>
         </div>
