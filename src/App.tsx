@@ -1,6 +1,7 @@
 import "./App.css";
 import { useState } from "react";
 import PrayDates from "./components/PrayDates";
+import AdSense from 'react-adsense';
 
 function App() {
   const [mainDate, setMainDate] = useState(new Date());
@@ -46,6 +47,10 @@ function App() {
 
   return (
     <div className="App">
+      <AdSense.Google
+        client='ca-pub-xxxxxxxxxxxxxxxx'
+        slot='xxxxxxxxxx'
+      />
       <h1 style={{ fontSize: "3em" }} className="text-danger mb-5">
         مواقيت الصلاة
         <br />
