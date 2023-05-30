@@ -149,7 +149,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
         }} checked={geoOn} className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
         <label className="form-check-label" htmlFor="flexSwitchCheckDefault">معرفة المواقيت بالموقع الجغرافي</label>
       </div>
-      {!geoOn && !geoPrayTimes && (
+      {!geoOn && (
         <select
           className="form-select"
           onChange={({ target }: any) => setGov(target.value)}
