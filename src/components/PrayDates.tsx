@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Adhan } from "adhan.ts";
-
+import * as Switch from '@radix-ui/react-switch';
 interface IParams {
   date: Date;
 }
@@ -9,15 +9,15 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   if (localStorage.gov === undefined) {
     localStorage.setItem("gov", JSON.stringify("01"));
   }
-  const Prayer = new Adhan("Egypt");
+  const Prayer = new Adhan();
   interface ITimes {
-    fajr: { iso: Date; formatedTime: string };
-    sunrise: { iso: Date; formatedTime: string };
-    dhuhr: { iso: Date; formatedTime: string };
-    asr: { iso: Date; formatedTime: string };
-    sunset: { iso: Date; formatedTime: string };
-    maghrib: { iso: Date; formatedTime: string };
-    isha: { iso: Date; formatedTime: string };
+    fajr: { iso: Date; formatedTime: string; };
+    sunrise: { iso: Date; formatedTime: string; };
+    dhuhr: { iso: Date; formatedTime: string; };
+    asr: { iso: Date; formatedTime: string; };
+    sunset: { iso: Date; formatedTime: string; };
+    maghrib: { iso: Date; formatedTime: string; };
+    isha: { iso: Date; formatedTime: string; };
     gov?: string;
   }
 
@@ -114,21 +114,55 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   const formatNum = (num: number): string =>
     +num < 10 ? `0${+num}` : `${num}`;
 
+  const [geoOn, setGeoOn] = useState<boolean>(JSON.parse(localStorage.geoOn || "false") || false);
+  const [geoLocation, setGeoLocation] = useState<GeolocationPosition>();
+  const [geoPrayTimes, setGeoPrayTimes] = useState<ITimes>();
+  console.log(geoOn);
+
+  useEffect(() => {
+    if (geoOn) {
+      navigator.geolocation.getCurrentPosition((pos) => setGeoLocation(pos));
+    }
+
+  }, [geoOn]);
+
+  useEffect(() => {
+    if (geoOn && geoLocation) {
+      setGeoPrayTimes(Prayer.getTimes(
+        new Date(geoLocation.timestamp) /* the Date */,
+        [geoLocation.coords.latitude, geoLocation.coords.longitude],
+        "auto" /* => timezone */
+      ));
+    }
+  }, [geoLocation]);
+
+
+  console.log({ geoPrayTimes, geoOn, geoLocation });
+
+
   return (
     <div>
-      <select
-        className="form-select"
-        onChange={({ target }: any) => setGov(target.value)}
-        aria-label="Default select example"
-        value={gov}
-      >
-        {govOptionList.map(({ gov, num }) => (
-          <option key={num} value={num}>
-            {gov}
-          </option>
-        ))}
-      </select>
-
+      <div className="form-check form-switch my-3">
+        <input value={geoOn === true ? "on" : "off"} onChange={(e) => {
+          setGeoOn(e.target.checked);
+          localStorage.setItem("geoOn", `${e.target.checked}`);
+        }} checked={geoOn} className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+        <label className="form-check-label" htmlFor="flexSwitchCheckDefault">معرفة المواقيت بالموقع الجغرافي</label>
+      </div>
+      {!geoOn && !geoPrayTimes && (
+        <select
+          className="form-select"
+          onChange={({ target }: any) => setGov(target.value)}
+          aria-label="Default select example"
+          value={gov}
+        >
+          {govOptionList.map(({ gov, num }) => (
+            <option key={num} value={num}>
+              {gov}
+            </option>
+          ))}
+        </select>
+      )}
       <table className="table table-bordered" dir="rtl">
         <thead>
           <tr>
@@ -140,51 +174,33 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
             <th>العشاء</th>
           </tr>
         </thead>
-        <tbody>
-          <tr className="fw-bold text-dark">
-            <th scope="row">{`${govPrayTimes(gov, date).gov}`}</th>
-            <td>
-              {`${govPrayTimes(gov, date).fajr.iso.toLocaleTimeString("ar-sa", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}`}
-            </td>
-            <td>
-              {`${govPrayTimes(gov, date).dhuhr.iso.toLocaleTimeString(
-                "ar-sa",
-                {
+        {geoOn && geoPrayTimes ? (
+          <tbody>
+            <tr className="fw-bold text-dark">
+              <th scope="row">المدينة الرايقة 👌</th>
+              <td>
+                {`${geoPrayTimes?.fajr.iso.toLocaleTimeString("ar-sa", {
                   hour: "2-digit",
                   minute: "2-digit",
-                }
-              )}`}
-            </td>
-            <td>
-              {`${govPrayTimes(gov, date).asr.iso.toLocaleTimeString("ar-sa", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}`}
-            </td>
-            <td>
-              {`${govPrayTimes(gov, date).maghrib.iso.toLocaleTimeString(
-                "ar-sa",
-                {
+                })}`}
+              </td>
+              <td>
+                {`${geoPrayTimes?.dhuhr.iso.toLocaleTimeString(
+                  "ar-sa",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }
+                )}`}
+              </td>
+              <td>
+                {`${geoPrayTimes?.asr.iso.toLocaleTimeString("ar-sa", {
                   hour: "2-digit",
                   minute: "2-digit",
-                }
-              )}`}
-            </td>
-            <td>
-              {`${govPrayTimes(gov, date).isha.iso.toLocaleTimeString("ar-sa", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}`}
-            </td>
-          </tr>
-          {gov !== cairo && (
-            <tr>
-              <th scope="row">{`${govPrayTimes(cairo, date).gov}`}</th>
+                })}`}
+              </td>
               <td>
-                {`${govPrayTimes(cairo, date).fajr.iso.toLocaleTimeString(
+                {`${geoPrayTimes?.maghrib.iso.toLocaleTimeString(
                   "ar-sa",
                   {
                     hour: "2-digit",
@@ -193,248 +209,350 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
                 )}`}
               </td>
               <td>
-                {`${govPrayTimes(cairo, date).dhuhr.iso.toLocaleTimeString(
-                  "ar-sa",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}`}
-              </td>
-              <td>
-                {`${govPrayTimes(cairo, date).asr.iso.toLocaleTimeString(
-                  "ar-sa",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}`}
-              </td>
-              <td>
-                {`${govPrayTimes(cairo, date).maghrib.iso.toLocaleTimeString(
-                  "ar-sa",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}`}
-              </td>
-              <td>
-                {`${govPrayTimes(cairo, date).isha.iso.toLocaleTimeString(
-                  "ar-sa",
-                  {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }
-                )}`}
+                {`${geoPrayTimes?.isha.iso.toLocaleTimeString("ar-sa", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}`}
               </td>
             </tr>
-          )}
-          <tr>
-            <th scope="row">{`${
-              govPrayTimes(formatNum(+gov + 1), date) === false
-                ? govPrayTimes(formatNum(+gov - 1)).gov
-                : govPrayTimes(formatNum(+gov + 1)).gov
-            }`}</th>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 1), date) === false
-                  ? govPrayTimes(
+            {gov !== cairo && (
+              <tr>
+                <th scope="row">{`${govPrayTimes(cairo, date).gov}`}</th>
+                <td>
+                  {`${govPrayTimes(cairo, date).fajr.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(cairo, date).dhuhr.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(cairo, date).asr.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(cairo, date).maghrib.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(cairo, date).isha.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+              </tr>
+            )}
+          </tbody>
+        ) :
+          (
+            <tbody>
+              <tr className="fw-bold text-dark">
+                <th scope="row">{`${govPrayTimes(gov, date).gov}`}</th>
+                <td>
+                  {`${govPrayTimes(gov, date).fajr.iso.toLocaleTimeString("ar-sa", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(gov, date).dhuhr.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(gov, date).asr.iso.toLocaleTimeString("ar-sa", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(gov, date).maghrib.iso.toLocaleTimeString(
+                    "ar-sa",
+                    {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )}`}
+                </td>
+                <td>
+                  {`${govPrayTimes(gov, date).isha.iso.toLocaleTimeString("ar-sa", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}`}
+                </td>
+              </tr>
+              {gov !== cairo && (
+                <tr>
+                  <th scope="row">{`${govPrayTimes(cairo, date).gov}`}</th>
+                  <td>
+                    {`${govPrayTimes(cairo, date).fajr.iso.toLocaleTimeString(
+                      "ar-sa",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}`}
+                  </td>
+                  <td>
+                    {`${govPrayTimes(cairo, date).dhuhr.iso.toLocaleTimeString(
+                      "ar-sa",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}`}
+                  </td>
+                  <td>
+                    {`${govPrayTimes(cairo, date).asr.iso.toLocaleTimeString(
+                      "ar-sa",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}`}
+                  </td>
+                  <td>
+                    {`${govPrayTimes(cairo, date).maghrib.iso.toLocaleTimeString(
+                      "ar-sa",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}`}
+                  </td>
+                  <td>
+                    {`${govPrayTimes(cairo, date).isha.iso.toLocaleTimeString(
+                      "ar-sa",
+                      {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }
+                    )}`}
+                  </td>
+                </tr>
+              )}
+              <tr>
+                <th scope="row">{`${govPrayTimes(formatNum(+gov + 1), date) === false
+                  ? govPrayTimes(formatNum(+gov - 1)).gov
+                  : govPrayTimes(formatNum(+gov + 1)).gov
+                  }`}</th>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 1), date) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 1),
                       date
                     ).fajr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 1),
                       date
                     ).fajr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 1)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 1)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 1),
                       date
                     ).dhuhr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 1),
                       date
                     ).dhuhr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 1)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 1)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 1),
                       date
                     ).asr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 1),
                       date
                     ).asr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 1)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 1)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 1),
                       date
                     ).maghrib.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 1),
                       date
                     ).maghrib.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 1)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 1)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 1),
                       date
                     ).isha.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 1),
                       date
                     ).isha.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-          </tr>
-          <tr>
-            <th scope="row">{`${
-              govPrayTimes(formatNum(+gov + 2)) === false
-                ? govPrayTimes(formatNum(+gov - 2)).gov
-                : govPrayTimes(formatNum(+gov + 2)).gov
-            }`}</th>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 2)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">{`${govPrayTimes(formatNum(+gov + 2)) === false
+                  ? govPrayTimes(formatNum(+gov - 2)).gov
+                  : govPrayTimes(formatNum(+gov + 2)).gov
+                  }`}</th>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 2)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 2),
                       date
                     ).fajr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 2),
                       date
                     ).fajr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 2)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 2)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 2),
                       date
                     ).dhuhr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 2),
                       date
                     ).dhuhr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 2)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 2)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 2),
                       date
                     ).asr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 2),
                       date
                     ).asr.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 2)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 2)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 2),
                       date
                     ).maghrib.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 2),
                       date
                     ).maghrib.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-            <td>
-              {`${
-                govPrayTimes(formatNum(+gov + 2)) === false
-                  ? govPrayTimes(
+                    }`}
+                </td>
+                <td>
+                  {`${govPrayTimes(formatNum(+gov + 2)) === false
+                    ? govPrayTimes(
                       formatNum(+gov - 2),
                       date
                     ).isha.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-                  : govPrayTimes(
+                    : govPrayTimes(
                       formatNum(+gov + 2),
                       date
                     ).isha.iso.toLocaleTimeString("ar-sa", {
                       hour: "2-digit",
                       minute: "2-digit",
                     })
-              }`}
-            </td>
-          </tr>
-        </tbody>
+                    }`}
+                </td>
+              </tr>
+            </tbody>
+          )
+        }
       </table>
     </div>
   );
