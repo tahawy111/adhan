@@ -165,13 +165,13 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
       )}
       {JSON.stringify(geoOn)}
       <hr />
-      {geoLocation?.timestamp}
+      {geoLocation?.timestamp ? geoLocation?.timestamp : "undefined"}
       <br />
-      {geoLocation?.coords.latitude}
+      {geoLocation?.coords.latitude ? geoLocation?.coords.latitude : "undefined"}
       <br />
-      {geoLocation?.coords.longitude}
+      {geoLocation?.coords.longitude ? geoLocation?.coords.longitude : "undefined"}
       <hr />
-      {JSON.stringify(geoPrayTimes)}
+      {JSON.stringify(geoPrayTimes) ? JSON.stringify(geoPrayTimes) : "undefined"}
 
       <table className="table table-bordered" dir="rtl">
         <thead>
