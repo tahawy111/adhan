@@ -554,6 +554,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
           )
         }
       </table>
+      {JSON.stringify(geoPrayTimes)}
     </div>
   );
 };
