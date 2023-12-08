@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { Adhan } from "adhan.ts";
-import * as Switch from '@radix-ui/react-switch';
+import axios from "axios";
 interface IParams {
   date: Date;
 }
 
 const PrayDates: React.FC<IParams> = ({ date }) => {
+  const [city, setCity] = useState();
   if (localStorage.gov === undefined) {
     localStorage.setItem("gov", JSON.stringify("01"));
   }
-  const Prayer = new Adhan();
+  const Prayer = new Adhan("Egypt");
   interface ITimes {
     fajr: { iso: Date; formatedTime: string; };
     sunrise: { iso: Date; formatedTime: string; };
@@ -117,7 +118,6 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   const [geoOn, setGeoOn] = useState<boolean>(JSON.parse(localStorage.geoOn || "false") || false);
   const [geoLocation, setGeoLocation] = useState<GeolocationPosition>();
   const [geoPrayTimes, setGeoPrayTimes] = useState<ITimes>();
-  console.log(geoOn);
 
   useEffect(() => {
     if (geoOn) {
@@ -133,6 +133,15 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
         [geoLocation.coords.latitude, geoLocation.coords.longitude],
         "auto" /* => timezone */
       ));
+
+      const getCity = async () => {
+        const city = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${geoLocation.coords.latitude}&lon=${geoLocation.coords.longitude}&apiKey=5bc307c3c82c479db9bdb38d0c73714f`);
+        setCity(city.data.features[0].properties
+          .city);
+      };
+
+      getCity();
+
     }
   }, [geoLocation]);
 
@@ -143,7 +152,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   return (
     <div>
       <div className="form-check form-switch my-3">
-        <input value={geoOn === true ? "on" : "off"} onChange={(e) => {
+        <input value={geoOn ? "on" : "off"} onChange={(e) => {
           setGeoOn(e.target.checked);
           localStorage.setItem("geoOn", `${e.target.checked}`);
         }} checked={geoOn} className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
@@ -178,7 +187,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
         <tbody>
           {geoOn && geoPrayTimes ? (
             <tr className="fw-bold text-dark">
-              <th scope="row">المدينة الرايقة 👌</th>
+              <th scope="row">{city || "المدينة الرايقة ✌"}</th>
               <td>
                 {`${geoPrayTimes?.fajr.iso.toLocaleTimeString("ar-sa", {
                   hour: "2-digit",
