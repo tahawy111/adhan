@@ -1,12 +1,22 @@
 import { useEffect, useState } from "react";
-import { Adhan } from "adhan.ts";
+import { Adhan } from "islamic-adhan";
 import axios from "axios";
+import getCalculationMethod from "../utils/getMethod";
 interface IParams {
   date: Date;
 }
 
 const PrayDates: React.FC<IParams> = ({ date }) => {
+  getCalculationMethod();
+  const [geoOn, setGeoOn] = useState<boolean>(JSON.parse(localStorage.geoOn || "false") || false);
+  const [geoLocation, setGeoLocation] = useState<GeolocationPosition>();
+  const [geoPrayTimes, setGeoPrayTimes] = useState<ITimes>();
   const [city, setCity] = useState();
+  const cairo = "01";
+  const [gov, setGov] = useState(JSON.parse(localStorage.gov));
+  useEffect(() => {
+    localStorage.setItem("gov", JSON.stringify(gov || null));
+  }, [gov]);
   if (localStorage.gov === undefined) {
     localStorage.setItem("gov", JSON.stringify("01"));
   }
@@ -76,11 +86,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
 
     return { ...times, gov: govesArr[govNum].ar };
   };
-  const cairo = "01";
-  const [gov, setGov] = useState(JSON.parse(localStorage.gov));
-  useEffect(() => {
-    localStorage.setItem("gov", JSON.stringify(gov || null));
-  }, [gov]);
+
 
   const govOptionList = [
     { num: "01", gov: "القاهرة" },
@@ -115,9 +121,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   const formatNum = (num: number): string =>
     +num < 10 ? `0${+num}` : `${num}`;
 
-  const [geoOn, setGeoOn] = useState<boolean>(JSON.parse(localStorage.geoOn || "false") || false);
-  const [geoLocation, setGeoLocation] = useState<GeolocationPosition>();
-  const [geoPrayTimes, setGeoPrayTimes] = useState<ITimes>();
+
 
   useEffect(() => {
     if (geoOn) {
@@ -137,7 +141,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
       const getCity = async () => {
         const city = await axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${geoLocation.coords.latitude}&lon=${geoLocation.coords.longitude}&apiKey=5bc307c3c82c479db9bdb38d0c73714f`);
         setCity(city.data.features[0].properties
-          .city);
+          .state);
       };
 
       getCity();

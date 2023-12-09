@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@radix-ui/react-switch": "^1.0.3",
-    "adhan.ts": "^1.0.6",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.0",
+    "islamic-adhan": "^1.0.7",
     "react": "^18.2.0",
     "react-adsense": "^0.1.0",
     "react-dom": "^18.2.0"
