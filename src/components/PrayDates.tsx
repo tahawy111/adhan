@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { Adhan } from "islamic-adhan";
 import axios from "axios";
-import getCalculationMethod from "../utils/getMethod";
 interface IParams {
   date: Date;
 }
 
 const PrayDates: React.FC<IParams> = ({ date }) => {
-  getCalculationMethod();
   const [geoOn, setGeoOn] = useState<boolean>(JSON.parse(localStorage.geoOn || "false") || false);
   const [geoLocation, setGeoLocation] = useState<GeolocationPosition>();
   const [geoPrayTimes, setGeoPrayTimes] = useState<ITimes>();
