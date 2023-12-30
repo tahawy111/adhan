@@ -11,13 +11,15 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   const [geoPrayTimes, setGeoPrayTimes] = useState<ITimes>();
   const [city, setCity] = useState();
   const cairo = "01";
-  const [gov, setGov] = useState(JSON.parse(localStorage.gov));
+  const [gov, setGov] = useState(localStorage.gov ? JSON.parse(localStorage.gov) : "01");
+
   useEffect(() => {
-    localStorage.setItem("gov", JSON.stringify(gov || null));
+    localStorage.setItem("gov", JSON.stringify(gov || "01"));
+    if (localStorage.gov === undefined) {
+      localStorage.setItem("gov", JSON.stringify("01"));
+    }
   }, [gov]);
-  if (localStorage.gov === undefined) {
-    localStorage.setItem("gov", JSON.stringify("01"));
-  }
+
   const Prayer = new Adhan("Egypt");
   interface ITimes {
     fajr: { iso: Date; formatedTime: string; };
@@ -151,7 +153,7 @@ const PrayDates: React.FC<IParams> = ({ date }) => {
   console.log({ geoPrayTimes, geoOn, geoLocation });
 
 
-  return (
+  return gov && (
     <div>
       <div className="form-check form-switch my-3">
         <input value={geoOn ? "on" : "off"} onChange={(e) => {
